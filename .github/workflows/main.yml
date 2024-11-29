@@ -1,0 +1,20 @@
+on: [push]
+
+jobs:
+  scan_for_tfms:
+    runs-on: ubuntu-latest
+    name: A job to scan for TFMs and get the setup/dotnet-version
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Scan for TFMs
+        uses: ./
+        id: scan-for-tfms
+        with:
+          projects: |
+            tests/testdata/src/**/*.csproj
+            tests/testdata/test/**/*.csproj
+      - name: Get the tfms
+        run: echo "${{ steps.scan-for-tfms.outputs.tmfs }}"
+      - name: Get the setup-dotnet-version
+        run: echo "${{ steps.scan-for-tfms.outputs.setup-dotnet-version }}"
